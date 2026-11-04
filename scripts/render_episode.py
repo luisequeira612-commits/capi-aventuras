@@ -80,6 +80,8 @@ def audio_duration(path):
 def make_frame(data,pose,word=None,translation=None,message=None):
     bg=Image.open(ROOT/"assets/generated"/f"fondo_{data['fondo']}.png").convert("RGB").resize((W,H))
     ch=Image.open(ROOT/"assets/generated"/f"capi_{pose}.png").convert("RGBA")
+    alpha=ch.getchannel("A").getbbox()
+    if alpha: ch=ch.crop(alpha)
     ch.thumbnail((600,900),Image.Resampling.LANCZOS)
     # Character fills ~50-55% video width and sits centrally with minimal dead space.
     bg.paste(ch,((W-ch.width)//2,390),ch)

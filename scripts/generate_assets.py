@@ -16,44 +16,44 @@ def font(size):
 
 def capybara(draw, pose):
     p=PALETTE
-    # Broad barrel-shaped body, short legs, no tail.
-    draw.ellipse((115,390,785,790), fill=p["fur"], outline=p["fur_dark"], width=9)
-    draw.ellipse((150,435,750,755), fill=p["fur_light"])
-    # Four compact feet, mostly tucked under the barrel.
-    for x in (245, 575):
-        draw.rounded_rectangle((x,700,x+105,825), radius=34, fill=p["fur_dark"])
-        draw.rounded_rectangle((x+10,700,x+95,790), radius=28, fill=p["fur"])
-    # Large sloping head, attached to the front of the body.
-    draw.ellipse((275,170,700,610), fill=p["fur"], outline=p["fur_dark"], width=9)
-    # Tiny low-set ears, not bear-like.
-    draw.ellipse((325,160,385,220), fill=p["fur_dark"])
-    draw.ellipse((333,168,377,210), fill=p["fur_light"])
-    draw.ellipse((600,160,660,220), fill=p["fur_dark"])
-    draw.ellipse((608,168,652,210), fill=p["fur_light"])
-    # Wide, squared muzzle and broad dark nose.
-    draw.rounded_rectangle((350,365,690,570), radius=68, fill=p["muzzle"], outline=p["fur_dark"], width=6)
-    draw.rounded_rectangle((445,365,605,435), radius=25, fill=p["nose"])
-    # Small eyes set high and wide.
-    for x in (390,625):
-        draw.ellipse((x-12,305,x+12,329), fill=p["eye"])
-        draw.ellipse((x-5,308,x+2,315), fill="#FFF4DD")
-    # Mouth changes by pose; keep the silhouette/palette identical.
+    # Cuerpo ancho y bajo, típico de capibara, con patas cortas y sin cola.
+    draw.ellipse((95,410,800,790), fill=p["fur"], outline=p["fur_dark"], width=8)
+    draw.ellipse((135,450,755,755), fill=p["fur_light"])
+    for x in (225, 590):
+        draw.rounded_rectangle((x,710,x+92,825), radius=32, fill=p["fur"])
+        draw.line((x+25,790,x+68,790), fill=p["fur_dark"], width=5)
+    # Cabeza alargada hacia delante: perfil horizontal, no redondo como un oso.
+    draw.ellipse((285,205,745,575), fill=p["fur"], outline=p["fur_dark"], width=8)
+    # Orejas pequeñas y bajas.
+    draw.ellipse((340,185,390,235), fill=p["fur_dark"])
+    draw.ellipse((348,193,382,225), fill=p["fur_light"])
+    draw.ellipse((635,190,685,240), fill=p["fur_dark"])
+    draw.ellipse((643,198,677,230), fill=p["fur_light"])
+    # Hocico largo y suave; nariz pequeña, ovalada y marrón.
+    draw.rounded_rectangle((420,375,735,545), radius=76, fill=p["muzzle"], outline=p["fur_dark"], width=5)
+    draw.ellipse((545,365,635,415), fill="#49332A")
+    # Ojos pequeños, tranquilos y separados.
+    for x in (405,675):
+        draw.ellipse((x-11,310,x+11,332), fill=p["eye"])
+        draw.ellipse((x-5,313,x+1,319), fill="#FFF4DD")
     if pose in ("sorprendido","hablando_abierta"):
-        draw.ellipse((485,475,555,545), fill="#5A3028", outline="#75472F", width=4)
-        draw.ellipse((503,485,537,515), fill="#D98779")
+        draw.ellipse((555,470,615,530), fill="#5A3028", outline="#75472F", width=3)
+        draw.ellipse((570,478,600,506), fill="#D98779")
     elif pose == "feliz":
-        draw.arc((465,465,575,555), 5, 175, fill="#63392C", width=9)
+        draw.arc((535,455,635,535), 5, 175, fill="#63392C", width=8)
     elif pose == "hablando_cerrada":
-        draw.line((475,515,565,515), fill="#63392C", width=8)
+        draw.line((545,505,625,505), fill="#63392C", width=7)
     else:
-        draw.arc((475,480,565,545), 5, 175, fill="#63392C", width=7)
-    # One short raised foreleg for greeting; otherwise tucked short forelegs.
+        draw.arc((545,465,625,525), 5, 175, fill="#63392C", width=6)
+    # Brazos cortos articulados, con el mismo pelaje claro y extremos redondeados.
     if pose == "saludando":
-        draw.line((680,520,755,410,780,345), fill=p["fur_dark"], width=48)
-        draw.ellipse((750,310,810,370), fill=p["fur_light"], outline=p["fur_dark"], width=5)
+        draw.line((685,560,735,505,770,425), fill=p["fur"], width=42)
+        draw.ellipse((748,395,792,439), fill=p["fur_light"], outline=p["fur_dark"], width=4)
     else:
-        draw.rounded_rectangle((210,535,300,680), radius=38, fill=p["fur_dark"])
-        draw.rounded_rectangle((650,535,735,680), radius=38, fill=p["fur_dark"])
+        draw.line((270,555,300,650), fill=p["fur"], width=42)
+        draw.ellipse((278,625,322,670), fill=p["fur_light"], outline=p["fur_dark"], width=3)
+        draw.line((700,550,675,645), fill=p["fur"], width=42)
+        draw.ellipse((653,620,697,665), fill=p["fur_light"], outline=p["fur_dark"], width=3)
 
 def draw_background(name):
     palettes = {
@@ -70,7 +70,7 @@ def draw_background(name):
     if name=="mercado":
         # Readable outdoor market: sky, striped awnings, stalls, produce crates, ground.
         d.rectangle((0,790,720,850),fill="#B58B57")
-        for x in (35,270,505):
+        for x in (20,290):
             d.rectangle((x,440,x+185,805),fill="#F5E7C9",outline="#80573B",width=7)
             d.rectangle((x+12,570,x+173,785),fill="#B77C48",outline="#80573B",width=5)
             d.rectangle((x-12,365,x+197,465),fill="#F7E8C9",outline="#80573B",width=6)

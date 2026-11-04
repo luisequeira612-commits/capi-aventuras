@@ -16,7 +16,9 @@ def main():
  lp=Path("output/layout.json")
  if not lp.exists():raise SystemExit("Falta output/layout.json")
  layout=json.loads(lp.read_text(encoding="utf-8"))
- layout_duration=layout[-1]["end"] if layout else 0\n delta=abs(layout_duration-duration)\n if not layout or delta>1.0:raise SystemExit(f"Manifiesto y MP4 difieren demasiado: manifiesto={layout_duration:.3f}s, MP4={duration:.3f}s, diferencia={delta:.3f}s")
+ layout_duration=layout[-1]["end"] if layout else 0
+ delta=abs(layout_duration-duration)
+ if not layout or delta>1.0:raise SystemExit(f"Manifiesto y MP4 difieren demasiado: manifiesto={layout_duration:.3f}s, MP4={duration:.3f}s, diferencia={delta:.3f}s")
  empty=[s for s in layout if s["type"] in ("word","caption") and (not s["has_text"] or not s["box"])]
  if empty:raise SystemExit(f"Cajas vacías: {len(empty)}")
  lower=1080*960;small=[]

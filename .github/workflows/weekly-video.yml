@@ -29,7 +29,7 @@ jobs:
       - name: Instalar herramientas
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          sudo apt-get install -y ffmpeg fonts-dejavu-core tesseract-ocr tesseract-ocr-por tesseract-ocr-spa
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Generar arte original y preview
@@ -82,7 +82,7 @@ jobs:
             gh release delete "capi-$ID" --yes
             git push origin --delete "capi-$ID" || true
           fi
-          gh release create "capi-$ID" "output/$ID.mp4" "output/$ID.srt" output/metadata.txt output/verification/verification.txt --title "Capi Aventuras · $ID" --notes "Borrador regenerado para revisión. No se publica automáticamente. Incluye informe de duración, fotogramas y silencios."
+          gh release create "capi-$ID" "output/$ID.mp4" "output/$ID.srt" output/metadata.txt output/verification/verification.txt output/verification/contact_sheet.jpg --title "Capi Aventuras · $ID" --notes "Borrador regenerado para revisión. No se publica automáticamente. Incluye informe de duración, fotogramas y silencios."
       - name: Guardar preview aunque la cola esté vacía
         if: steps.ep.outputs.empty == 'true'
         run: |

@@ -115,7 +115,7 @@ def main():
         index=len(clips); audio=work/f"a{index}.wav"
         if text:
             raw=work/f"voice{index}.mp3"; make_voice(text,lang,raw)
-            run(["ffmpeg","-y","-i",str(raw),"-af","silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12:stop_periods=1:stop_duration=0.15:stop_threshold=-45dB:stop_silence=0.12","-ac","1","-ar","24000",str(audio)])
+            run(["ffmpeg","-y","-i",str(raw),"-af","silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12,areverse,silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12,areverse","-ac","1","-ar","24000",str(audio)])
             spoken=audio_duration(audio)
             if min_duration and spoken+0.35<float(min_duration):
                 raise RuntimeError(f"Locución demasiado corta: {spoken:.2f}s; se necesitan al menos {float(min_duration):.2f}s. Amplía el texto, no añadas silencio.")

@@ -1,79 +1,62 @@
-import argparse, json, re, shutil, subprocess
+import argparse,json,re,shutil,subprocess
 from pathlib import Path
-from PIL import Image, ImageDraw
+from PIL import Image,ImageDraw
 
 def main():
-    parser=argparse.ArgumentParser()
-    parser.add_argument("video")
-    parser.add_argument("--out",default="output/verification")
-    args=parser.parse_args()
-    video=Path(args.video); out=Path(args.out); frames=out/"frames"
-    frames.mkdir(parents=True,exist_ok=True)
-    duration=float(subprocess.check_output(
-        ["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",str(video)],text=True).strip())
-    times=list(range(0,int(duration)+1,3)); sampled=[]
-    for second in times:
-        frame=frames/f"frame_{second:04d}.jpg"
-        subprocess.run(["ffmpeg","-y","-ss",str(second),"-i",str(video),"-frames:v","1","-q:v","3",str(frame)],
-                       check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
-        if frame.exists() and frame.stat().st_size: sampled.append((second,frame))
-    meta=subprocess.check_output(
-        ["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=width,height","-of","json",str(video)],text=True)
-    stream=json.loads(meta)["streams"][0]
-    assert (stream["width"],stream["height"])==(1080,1920), f"Resolución inesperada: {stream}"
-
-    # Pillow comprueba geometría del texto durante render; Tesseract añade control de bordes.
-    ocr_words=0; ocr_edge_hits=0
-    if shutil.which("tesseract"):
-        for _,frame in sampled:
-            result=subprocess.run(["tesseract",str(frame),"stdout","tsv"],text=True,capture_output=True,check=True)
-            for row in result.stdout.splitlines()[1:]:
-                cols=row.split("\t")
-                if len(cols)<12 or not cols[11].strip(): continue
-                x,y,width,height=map(int,cols[6:10]); ocr_words+=1
-                if x<2 or y<2 or x+width>1078 or y+height>1918: ocr_edge_hits+=1
-        if ocr_edge_hits:
-            raise SystemExit(f"OCR detectó {ocr_edge_hits} textos tocando el borde del fotograma")
-
-    proc=subprocess.run(["ffmpeg","-i",str(video),"-af","silencedetect=noise=-45dB:d=0.8","-f","null","-"],
-                        text=True,capture_output=True)
-    starts=[]; silences=[]
-    for line in proc.stderr.splitlines():
-        match=re.search(r"silence_start: ([0-9.]+)",line)
-        if match: starts.append(float(match.group(1)))
-        end_match=re.search(r"silence_end: ([0-9.]+)",line)
-        duration_match=re.search(r"silence_duration: ([0-9.]+)",line)
-        if end_match and duration_match and starts: silences.append((starts.pop(0),float(duration_match.group(1))))
-    max_silence=max((item[1] for item in silences),default=0.0)
-
-    thumb_w,thumb_h,columns=180,320,4
-    rows=(len(sampled)+columns-1)//columns
-    contact=Image.new("RGB",(columns*thumb_w,rows*(thumb_h+28)),"#F4F0E7")
-    draw=ImageDraw.Draw(contact)
-    for index,(second,frame) in enumerate(sampled):
-        thumb=Image.open(frame).convert("RGB").resize((thumb_w,thumb_h))
-        x=(index%columns)*thumb_w; y=(index//columns)*(thumb_h+28)
-        contact.paste(thumb,(x,y)); draw.text((x+8,y+thumb_h+4),f"{second:03d}s",fill="#30231F")
-    contact.save(out/"contact_sheet.jpg",quality=88)
-
-    report=out/"verification.txt"
-    report.write_text("\n".join([
-        f"Video: {video.name}",
-        f"Duración exacta (ffprobe): {duration:.3f} s",
-        f"Resolución: {stream['width']}x{stream['height']}",
-        f"Fotogramas extraídos cada 3 s: {len(sampled)}",
-        "Hoja de contacto: contact_sheet.jpg",
-        f"OCR palabras detectadas: {ocr_words}",
-        f"OCR textos tocando el borde: {ocr_edge_hits}",
-        f"Silencios >=0.8 s detectados: {len(silences)}",
-        f"Silencio más largo detectado: {max_silence:.3f} s",
-        "Intervalos de silencio: " + "; ".join(f"{start:.3f}-{start+length:.3f}s ({length:.3f}s)" for start,length in silences),
-        "Texto: medición Pillow y ajuste automático antes de dibujar; OCR de bordes como comprobación secundaria.",
-        "Cajas vacías: no se dibujan cajas inferiores sin texto."
-    ])+"\n",encoding="utf-8")
-    print(report.read_text(encoding="utf-8"))
-    if max_silence>3.2:
-        raise SystemExit(f"Silencio demasiado largo: {max_silence:.3f}s")
-
-if __name__=="__main__":
-    main()
+ p=argparse.ArgumentParser();p.add_argument("video");p.add_argument("--out",default="output/verification");a=p.parse_args()
+ video=Path(a.video);out=Path(a.out);frames=out/"frames";frames.mkdir(parents=True,exist_ok=True)
+ duration=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",str(video)],text=True).strip())
+ if not 60<=duration<=75:raise SystemExit(f"Duración fuera del objetivo: {duration:.3f}s (60–75s)")
+ sampled=[]
+ for sec in range(0,int(duration)+1,3):
+  fp=frames/f"frame_{sec:04d}.jpg";subprocess.run(["ffmpeg","-y","-ss",str(sec),"-i",str(video),"-frames:v","1","-q:v","3",str(fp)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+  if fp.exists() and fp.stat().st_size:sampled.append((sec,fp))
+ meta=json.loads(subprocess.check_output(["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=width,height","-of","json",str(video)],text=True))["streams"][0]
+ if (meta["width"],meta["height"])!=(1080,1920):raise SystemExit("Resolución distinta de 1080x1920")
+ lp=Path("output/layout.json")
+ if not lp.exists():raise SystemExit("Falta output/layout.json")
+ layout=json.loads(lp.read_text(encoding="utf-8"))
+ if not layout or abs(layout[-1]["end"]-duration)>.25:raise SystemExit("Manifiesto y MP4 no coinciden")
+ empty=[s for s in layout if s["type"] in ("word","caption") and (not s["has_text"] or not s["box"])]
+ if empty:raise SystemExit(f"Cajas vacías: {len(empty)}")
+ lower=1080*960;small=[]
+ for s in layout:
+  if s["type"] not in ("word","caption"):continue
+  x1,y1,x2,y2=s["box"]
+  if y1<960 or (x2-x1)*(y2-y1)/lower<.25:small.append(s)
+ if small:raise SystemExit(f"Tarjetas dejan zonas inferiores grandes: {len(small)}")
+ checks=0;fail=[]
+ for sec,fp in sampled:
+  s=next((v for v in layout if v["start"]<=sec+.01<v["end"] and v["type"] in ("word","caption")),None)
+  if not s:continue
+  x1,y1,x2,y2=s["box"];im=Image.open(fp).convert("RGB").crop((x1+12,y1+12,x2-12,y2-12)).resize((48,32))
+  px=list(im.getdata());ratio=sum(1 for r,g,b in px if r>235 and g>225 and b>205)/len(px);checks+=1
+  if ratio<.30:fail.append((sec,round(ratio,3)))
+ if fail:raise SystemExit(f"Tarjetas vacías/no visibles en muestras: {fail}")
+ ocr=edges=0
+ if shutil.which("tesseract"):
+  for _,fp in sampled:
+   res=subprocess.run(["tesseract",str(fp),"stdout","tsv"],text=True,capture_output=True,check=True)
+   for row in res.stdout.splitlines()[1:]:
+    cols=row.split("\t")
+    if len(cols)<12 or not cols[11].strip():continue
+    x,y,w,h=map(int,cols[6:10]);ocr+=1
+    if x<2 or y<2 or x+w>1078 or y+h>1918:edges+=1
+ if edges:raise SystemExit(f"OCR detectó {edges} textos tocando el borde")
+ proc=subprocess.run(["ffmpeg","-i",str(video),"-af","silencedetect=noise=-45dB:d=0.8","-f","null","-"],text=True,capture_output=True)
+ starts=[];silences=[]
+ for line in proc.stderr.splitlines():
+  m=re.search(r"silence_start: ([0-9.]+)",line)
+  if m:starts.append(float(m.group(1)))
+  e=re.search(r"silence_end: ([0-9.]+)",line);d=re.search(r"silence_duration: ([0-9.]+)",line)
+  if e and d and starts:silences.append((starts.pop(0),float(e.group(1)),float(d.group(1))))
+ longest=max((x[2] for x in silences),default=0)
+ contact=Image.new("RGB",(720,((len(sampled)+3)//4)*348),"#F4F0E7");draw=ImageDraw.Draw(contact)
+ for i,(sec,fp) in enumerate(sampled):
+  thumb=Image.open(fp).convert("RGB").resize((180,320));x=i%4*180;y=i//4*348
+  contact.paste(thumb,(x,y));draw.text((x+8,y+324),f"{sec:03d}s",fill="#30231F")
+ contact.save(out/"contact_sheet.jpg",quality=90)
+ report=[f"Video: {video.name}",f"Duración exacta (ffprobe): {duration:.3f} s",f"Resolución: {meta['width']}x{meta['height']}",f"Fotogramas extraídos cada 3 s: {len(sampled)}","Hoja de contacto: contact_sheet.jpg",f"OCR palabras detectadas: {ocr}",f"OCR textos tocando el borde: {edges}",f"Cajas vacías: {len(empty)}",f"Tarjetas revisadas por ocupación de píxeles: {checks}",f"Tarjetas no visibles en muestras: {len(fail)}",f"Tarjetas con área insuficiente: {len(small)}",f"Silencios >=0.8 s detectados: {len(silences)}",f"Silencio más largo detectado: {longest:.3f} s","Intervalos: "+"; ".join(f"{s:.3f}-{e:.3f}s ({d:.3f}s)" for s,e,d in silences),"Texto: medición Pillow + OCR de bordes.","Tarjetas: manifiesto geométrico + proporción de píxeles claros en muestras.","Limitación: las métricas no juzgan por completo la estética, anatomía de Capi ni la percepción humana de espacios vacíos; revisar la hoja de contacto."]
+ (out/"verification.txt").write_text("\n".join(report)+"\n",encoding="utf-8");print("\n".join(report))
+ if longest>3.2:raise SystemExit(f"Silencio demasiado largo: {longest:.3f}s")
+if __name__=="__main__":main()

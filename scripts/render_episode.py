@@ -144,7 +144,7 @@ def main():
     add("Vamos revisar! Repita as palavras comigo.","pt","feliz",message="Vamos revisar! Repita as palavras comigo.",min_duration=4.5)
     for scene in data["escenas"]:
         item=scene["palabras_es"][0]
-        add(item["es"],"es","feliz",item["es"],item["pt"],min_duration=1.5)
+        add(item["es"],"es","feliz",item["es"],item["pt"])
         add("",pose="feliz",word=item["es"],translation=item["pt"],silence=0.8)
     closing=data.get("cierre_pt","Muito bem! Até a próxima aventura!")
     add(closing,"pt","saludando",message=closing,min_duration=6.5)

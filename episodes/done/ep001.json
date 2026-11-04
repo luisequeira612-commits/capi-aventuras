@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Hola, Capi! Vamos ao mercado aprender palavras novas.",
+  "lugar": "Hola, Capi",
+  "fondo": "mercado",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, manzana!",
+      "palabras_es": [
+        {
+          "es": "manzana",
+          "pt": "maçã"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, pan!",
+      "palabras_es": [
+        {
+          "es": "pan",
+          "pt": "pão"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, leche!",
+      "palabras_es": [
+        {
+          "es": "leche",
+          "pt": "leite"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, plátano!",
+      "palabras_es": [
+        {
+          "es": "plátano",
+          "pt": "banana"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 001, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

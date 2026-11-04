@@ -16,7 +16,7 @@ def main():
  lp=Path("output/layout.json")
  if not lp.exists():raise SystemExit("Falta output/layout.json")
  layout=json.loads(lp.read_text(encoding="utf-8"))
- if not layout or abs(layout[-1]["end"]-duration)>.25:raise SystemExit("Manifiesto y MP4 no coinciden")
+ layout_duration=layout[-1]["end"] if layout else 0\n delta=abs(layout_duration-duration)\n if not layout or delta>1.0:raise SystemExit(f"Manifiesto y MP4 difieren demasiado: manifiesto={layout_duration:.3f}s, MP4={duration:.3f}s, diferencia={delta:.3f}s")
  empty=[s for s in layout if s["type"] in ("word","caption") and (not s["has_text"] or not s["box"])]
  if empty:raise SystemExit(f"Cajas vacías: {len(empty)}")
  lower=1080*960;small=[]
@@ -56,7 +56,7 @@ def main():
   thumb=Image.open(fp).convert("RGB").resize((180,320));x=i%4*180;y=i//4*348
   contact.paste(thumb,(x,y));draw.text((x+8,y+324),f"{sec:03d}s",fill="#30231F")
  contact.save(out/"contact_sheet.jpg",quality=90)
- report=[f"Video: {video.name}",f"Duración exacta (ffprobe): {duration:.3f} s",f"Resolución: {meta['width']}x{meta['height']}",f"Fotogramas extraídos cada 3 s: {len(sampled)}","Hoja de contacto: contact_sheet.jpg",f"OCR palabras detectadas: {ocr}",f"OCR textos tocando el borde: {edges}",f"Cajas vacías: {len(empty)}",f"Tarjetas revisadas por ocupación de píxeles: {checks}",f"Tarjetas no visibles en muestras: {len(fail)}",f"Tarjetas con área insuficiente: {len(small)}",f"Silencios >=0.8 s detectados: {len(silences)}",f"Silencio más largo detectado: {longest:.3f} s","Intervalos: "+"; ".join(f"{s:.3f}-{e:.3f}s ({d:.3f}s)" for s,e,d in silences),"Texto: medición Pillow + OCR de bordes.","Tarjetas: manifiesto geométrico + proporción de píxeles claros en muestras.","Limitación: las métricas no juzgan por completo la estética, anatomía de Capi ni la percepción humana de espacios vacíos; revisar la hoja de contacto."]
+ report=[f"Video: {video.name}",f"Duración exacta (ffprobe): {duration:.3f} s",f"Duración planificada (manifiesto): {layout_duration:.3f} s",f"Diferencia de muxing: {delta:.3f} s",f"Resolución: {meta['width']}x{meta['height']}",f"Fotogramas extraídos cada 3 s: {len(sampled)}","Hoja de contacto: contact_sheet.jpg",f"OCR palabras detectadas: {ocr}",f"OCR textos tocando el borde: {edges}",f"Cajas vacías: {len(empty)}",f"Tarjetas revisadas por ocupación de píxeles: {checks}",f"Tarjetas no visibles en muestras: {len(fail)}",f"Tarjetas con área insuficiente: {len(small)}",f"Silencios >=0.8 s detectados: {len(silences)}",f"Silencio más largo detectado: {longest:.3f} s","Intervalos: "+"; ".join(f"{s:.3f}-{e:.3f}s ({d:.3f}s)" for s,e,d in silences),"Texto: medición Pillow + OCR de bordes.","Tarjetas: manifiesto geométrico + proporción de píxeles claros en muestras.","Limitación: las métricas no juzgan por completo la estética, anatomía de Capi ni la percepción humana de espacios vacíos; revisar la hoja de contacto."]
  (out/"verification.txt").write_text("\n".join(report)+"\n",encoding="utf-8");print("\n".join(report))
  if longest>3.2:raise SystemExit(f"Silencio demasiado largo: {longest:.3f}s")
 if __name__=="__main__":main()

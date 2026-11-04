@@ -21,7 +21,7 @@ def main():
   idx=len(clips); au=w/f"a{idx}.mp3"
   if text:
    v="pt-BR-FranciscaNeural" if lang=="pt" else "es-MX-DaliaNeural"; voice(text,v,au)
-   dur=float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",str(au)],text=True).strip())
+   dur=max(4.5,float(subprocess.check_output(["ffprobe","-v","error","-show_entries","format=duration","-of","csv=p=0",str(au)],text=True).strip()))
    subs.append((tm,tm+dur,text))
   else:
    cmd(["ffmpeg","-y","-f","lavfi","-i","anullsrc=r=24000:cl=mono","-t",str(silence),str(au)]); dur=silence
@@ -36,12 +36,15 @@ def main():
  scene(d["titulo_pt"],"pt","",None,"saludando")
  scene(d["lugar"],"pt",pose="neutral")
  for s in d["escenas"]:
-  x=s["palabras_es"][0]; scene(x["es"],"es",x["es"],x["pt"],s["pose"]); scene("","",silence=2)
+  x=s["palabras_es"][0]
+  scene(s["texto_pt"],"pt",pose=s["pose"])
+  scene(x["es"],"es",x["es"],x["pt"],s["pose"])
+  scene("","",silence=2)
  scene("Vamos revisar!","pt",pose="feliz")
  scene("Muito bem! Até a próxima aventura!","pt",pose="saludando")
  parts=[]
  for i,(im,au,dur) in enumerate(clips):
-  v=w/f"v{i}.mp4"; cmd(["ffmpeg","-y","-loop","1","-i",str(im),"-i",str(au),"-t",str(dur),"-r",str(FPS),"-vf",f"scale={W}:{H},format=yuv420p","-c:v","libx264","-preset","ultrafast","-c:a","aac","-shortest",str(v)]); parts.append(v)
+  v=w/f"v{i}.mp4"; cmd(["ffmpeg","-y","-loop","1","-i",str(im),"-i",str(au),"-t",str(dur),"-r",str(FPS),"-vf",f"scale={W}:{H},format=yuv420p","-c:v","libx264","-preset","ultrafast","-af","apad","-c:a","aac","-t",str(dur),str(v)]); parts.append(v)
  lst=w/"list.txt"; lst.write_text("\n".join(f"file '{p.resolve()}'" for p in parts))
  eid=Path(a.episode).stem; mp4=out/f"{eid}.mp4"; cmd(["ffmpeg","-y","-f","concat","-safe","0","-i",str(lst),"-c","copy","-movflags","+faststart",str(mp4)])
  def stamp(t):

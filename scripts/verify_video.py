@@ -41,8 +41,9 @@ def main():
     for line in proc.stderr.splitlines():
         match=re.search(r"silence_start: ([0-9.]+)",line)
         if match: starts.append(float(match.group(1)))
-        match=re.search(r"silence_end: ([0-9.]+) \\| silence_duration: ([0-9.]+)",line)
-        if match and starts: silences.append((starts.pop(0),float(match.group(2))))
+        end_match=re.search(r"silence_end: ([0-9.]+)",line)
+        duration_match=re.search(r"silence_duration: ([0-9.]+)",line)
+        if end_match and duration_match and starts: silences.append((starts.pop(0),float(duration_match.group(1))))
     max_silence=max((item[1] for item in silences),default=0.0)
 
     thumb_w,thumb_h,columns=180,320,4

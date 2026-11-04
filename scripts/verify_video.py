@@ -22,7 +22,7 @@ def main():
         for _,frame in sampled:
             result=subprocess.run(["tesseract",str(frame),"stdout","tsv"],text=True,capture_output=True,check=True)
             for row in result.stdout.splitlines()[1:]:
-                cols=row.split("\\t")
+                cols=row.split("\t")
                 if len(cols)<12 or not cols[11].strip(): continue
                 x,y,w,h=map(int,cols[6:10]); ocr_words+=1
                 if x<2 or y<2 or x+w>1080-2 or y+h>1920-2: ocr_edge_hits+=1

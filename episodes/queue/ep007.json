@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Capi voltou ao mercado para aprender mais!",
+  "lugar": "Capi voltou ao mercado para aprender mais",
+  "fondo": "mercado",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, tomate!",
+      "palabras_es": [
+        {
+          "es": "tomate",
+          "pt": "tomate"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, queso!",
+      "palabras_es": [
+        {
+          "es": "queso",
+          "pt": "queijo"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, uva!",
+      "palabras_es": [
+        {
+          "es": "uva",
+          "pt": "uva"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, naranja!",
+      "palabras_es": [
+        {
+          "es": "naranja",
+          "pt": "laranja"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 007, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

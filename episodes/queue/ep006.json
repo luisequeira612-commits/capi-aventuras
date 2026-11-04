@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Vamos passear no parque com Capi!",
+  "lugar": "Vamos passear no parque com Capi",
+  "fondo": "parque",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, árbol!",
+      "palabras_es": [
+        {
+          "es": "árbol",
+          "pt": "árvore"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, hoja!",
+      "palabras_es": [
+        {
+          "es": "hoja",
+          "pt": "folha"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, pájaro!",
+      "palabras_es": [
+        {
+          "es": "pájaro",
+          "pt": "pássaro"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, pelota!",
+      "palabras_es": [
+        {
+          "es": "pelota",
+          "pt": "bola"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 006, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

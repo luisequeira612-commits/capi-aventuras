@@ -1,0 +1,1 @@
+Carpeta vacía intencionalmente. No se descarga ni incorpora música de terceros. Solo añadir música original o con licencia comercial verificable y conservar aquí la prueba de licencia.\n

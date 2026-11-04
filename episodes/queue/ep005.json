@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Capi está na cozinha. Que delícia aprender!",
+  "lugar": "Capi está na cozinha. Que delícia aprender",
+  "fondo": "cocina",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, agua!",
+      "palabras_es": [
+        {
+          "es": "agua",
+          "pt": "água"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, vaso!",
+      "palabras_es": [
+        {
+          "es": "vaso",
+          "pt": "copo"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, plato!",
+      "palabras_es": [
+        {
+          "es": "plato",
+          "pt": "prato"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, cuchara!",
+      "palabras_es": [
+        {
+          "es": "cuchara",
+          "pt": "colher"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 005, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

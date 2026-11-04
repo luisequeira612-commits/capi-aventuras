@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Na fazenda, Capi encontrou muitas coisas!",
+  "lugar": "Na fazenda, Capi encontrou muitas coisas",
+  "fondo": "granja",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, vaca!",
+      "palabras_es": [
+        {
+          "es": "vaca",
+          "pt": "vaca"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, gallina!",
+      "palabras_es": [
+        {
+          "es": "gallina",
+          "pt": "galinha"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, caballo!",
+      "palabras_es": [
+        {
+          "es": "caballo",
+          "pt": "cavalo"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, flor!",
+      "palabras_es": [
+        {
+          "es": "flor",
+          "pt": "flor"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 004, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

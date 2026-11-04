@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Hoje é dia de brincar na praia com Capi!",
+  "lugar": "Hoje é dia de brincar na praia com Capi",
+  "fondo": "playa",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, concha!",
+      "palabras_es": [
+        {
+          "es": "concha",
+          "pt": "concha"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, barco!",
+      "palabras_es": [
+        {
+          "es": "barco",
+          "pt": "barco"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, ola!",
+      "palabras_es": [
+        {
+          "es": "ola",
+          "pt": "onda"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, toalla!",
+      "palabras_es": [
+        {
+          "es": "toalla",
+          "pt": "toalha"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 008, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

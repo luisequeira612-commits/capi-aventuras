@@ -1,0 +1,84 @@
+name: Crear video semanal
+on:
+  schedule:
+    - cron: "0 15 * * 5"
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: capi-weekly-render
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar herramientas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Generar arte original y preview
+        run: python scripts/generate_assets.py
+      - name: Validar episodios
+        run: python scripts/validate_episodes.py
+      - name: Elegir episodio
+        id: ep
+        shell: bash
+        run: |
+          P=$(python scripts/select_episode.py)
+          if [ "$P" = "NO_EPISODES" ]; then echo "empty=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          echo "empty=false" >> "$GITHUB_OUTPUT"
+          echo "path=$P" >> "$GITHUB_OUTPUT"
+          echo "id=$(basename "$P" .json)" >> "$GITHUB_OUTPUT"
+      - name: Preparar respaldo Piper (si está disponible)
+        if: steps.ep.outputs.empty == 'false'
+        continue-on-error: true
+        run: |
+          mkdir -p .cache/piper
+          curl -L --fail --retry 2 -o .cache/piper/es_MX-claude-high.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx
+          curl -L --fail --retry 2 -o .cache/piper/es_MX-claude-high.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json
+          echo "PIPER_MODEL=$PWD/.cache/piper/es_MX-claude-high.onnx" >> "$GITHUB_ENV"
+      - name: Renderizar MP4, SRT y metadatos
+        if: steps.ep.outputs.empty == 'false'
+        run: python scripts/render_episode.py "${{ steps.ep.outputs.path }}"
+      - name: Guardar episodio y preview
+        if: steps.ep.outputs.empty == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EP: ${{ steps.ep.outputs.path }}
+          ID: ${{ steps.ep.outputs.id }}
+        run: |
+          mkdir -p episodes/done
+          mv "$EP" episodes/done/
+          git add episodes/done/"$ID".json preview/capi_poses.png assets/generated/
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Procesar $ID"
+          git push
+          gh release create "capi-$ID" "output/$ID.mp4" "output/$ID.srt" output/metadata.txt --title "Capi Aventuras · $ID" --notes "Borrador para revisión. No se publica automáticamente. Comprueba pronunciación, contenido y subtítulos."
+      - name: Guardar preview aunque la cola esté vacía
+        if: steps.ep.outputs.empty == 'true'
+        run: |
+          git add preview/capi_poses.png assets/generated/
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "Generar preview de Capi"
+            git push
+          fi
+      - name: Avisar si quedan dos o menos
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          N=$(find episodes/queue -maxdepth 1 -name 'ep*.json' | wc -l)
+          if [ "$N" -le 2 ]; then
+            if [ "$(gh issue list --state open --search 'Añadir episodios a Capi Aventuras' --json number --jq 'length')" = "0" ]; then
+              gh issue create --title "Añadir episodios a Capi Aventuras" --body "Quedan $N episodios en la cola. Añade nuevos JSON a episodes/queue siguiendo el README."
+            fi
+          fi

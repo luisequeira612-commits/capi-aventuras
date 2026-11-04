@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Capi chegou à escola. Vamos descobrir quatro palavras!",
+  "lugar": "Capi chegou à escola. Vamos descobrir quatro palavras",
+  "fondo": "escuela",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, libro!",
+      "palabras_es": [
+        {
+          "es": "libro",
+          "pt": "livro"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, lápiz!",
+      "palabras_es": [
+        {
+          "es": "lápiz",
+          "pt": "lápis"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, mesa!",
+      "palabras_es": [
+        {
+          "es": "mesa",
+          "pt": "mesa"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, mochila!",
+      "palabras_es": [
+        {
+          "es": "mochila",
+          "pt": "mochila"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 003, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

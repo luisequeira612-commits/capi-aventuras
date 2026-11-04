@@ -1,0 +1,55 @@
+{
+  "titulo_pt": "Hoje Capi está na praia! Vamos aprender juntos.",
+  "lugar": "Hoje Capi está na praia",
+  "fondo": "playa",
+  "escenas": [
+    {
+      "pose": "hablando_abierta",
+      "texto_pt": "Em espanhol, arena!",
+      "palabras_es": [
+        {
+          "es": "arena",
+          "pt": "areia"
+        }
+      ]
+    },
+    {
+      "pose": "feliz",
+      "texto_pt": "Em espanhol, mar!",
+      "palabras_es": [
+        {
+          "es": "mar",
+          "pt": "mar"
+        }
+      ]
+    },
+    {
+      "pose": "hablando_cerrada",
+      "texto_pt": "Em espanhol, sol!",
+      "palabras_es": [
+        {
+          "es": "sol",
+          "pt": "sol"
+        }
+      ]
+    },
+    {
+      "pose": "sorprendido",
+      "texto_pt": "Em espanhol, pez!",
+      "palabras_es": [
+        {
+          "es": "pez",
+          "pt": "peixe"
+        }
+      ]
+    }
+  ],
+  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 002, para crianças de 3 a 6 anos.",
+  "hashtags": [
+    "#CapiAventuras",
+    "#AprenderEspanhol",
+    "#EspanholParaCriancas",
+    "#Capivara"
+  ]
+}

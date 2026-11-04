@@ -1,10 +1,5 @@
 name: Crear video semanal
 on:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/**"
-      - ".github/workflows/weekly-video.yml"
   schedule:
     - cron: "0 15 * * 5"
   workflow_dispatch:
@@ -44,7 +39,7 @@ jobs:
       - name: Elegir episodio
         id: ep
         env:
-          EPISODE_ID: ${{ github.event_name == 'push' && 'ep001' || inputs.episode_id }}
+          EPISODE_ID: ${{ inputs.episode_id }}
         shell: bash
         run: |
           P=$(python scripts/select_episode.py)

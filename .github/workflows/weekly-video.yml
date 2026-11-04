@@ -46,7 +46,10 @@ jobs:
           mkdir -p .cache/piper
           curl -L --fail --retry 2 -o .cache/piper/es_MX-claude-high.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx
           curl -L --fail --retry 2 -o .cache/piper/es_MX-claude-high.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json
-          echo "PIPER_MODEL=$PWD/.cache/piper/es_MX-claude-high.onnx" >> "$GITHUB_ENV"
+          curl -L --fail --retry 2 -o .cache/piper/pt_BR-faber-medium.onnx https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx
+          curl -L --fail --retry 2 -o .cache/piper/pt_BR-faber-medium.onnx.json https://huggingface.co/rhasspy/piper-voices/resolve/main/pt/pt_BR/faber/medium/pt_BR-faber-medium.onnx.json
+          echo "PIPER_MODEL_ES=$PWD/.cache/piper/es_MX-claude-high.onnx" >> "$GITHUB_ENV"
+          echo "PIPER_MODEL_PT=$PWD/.cache/piper/pt_BR-faber-medium.onnx" >> "$GITHUB_ENV"
       - name: Renderizar MP4, SRT y metadatos
         if: steps.ep.outputs.empty == 'false'
         run: python scripts/render_episode.py "${{ steps.ep.outputs.path }}"

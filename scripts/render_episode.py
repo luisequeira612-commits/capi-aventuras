@@ -9,8 +9,8 @@ async def edge(t,v,p): await edge_tts.Communicate(t,voice=v,rate="-5%").save(str
 def voice(t,v,p):
  try: asyncio.run(edge(t,v,p))
  except Exception as e:
-  model=os.getenv("PIPER_MODEL")
-  if not model or not shutil.which("piper"): raise RuntimeError(f"edge-tts falló y Piper no está listo: {e}")
+  model=os.getenv("PIPER_MODEL_PT" if v.startswith("pt-") else "PIPER_MODEL_ES")
+  if not model or not shutil.which("piper"): raise RuntimeError(f"edge-tts falló y Piper no está listo para {v}: {e}")
   subprocess.run(["piper","--model",model,"--output_file",str(p)],input=t,text=True,check=True)
 def main():
  ap=argparse.ArgumentParser(); ap.add_argument("episode"); ap.add_argument("--out",default="output"); a=ap.parse_args()

@@ -135,7 +135,7 @@ for name in ("mercado","playa","escuela","granja","cocina","parque"):
     draw_background(name).save(OUT/f"fondo_{name}.png")
 
 # Contact sheet: character poses and all six recognizable locations.
-sheet=Image.new("RGB",(900,1050),"#F8F4E9"); d=ImageDraw.Draw(sheet)
+sheet=Image.new("RGB",(900,1200),"#F8F4E9"); d=ImageDraw.Draw(sheet)
 for i,pose in enumerate(POSES):
     x=(i%3)*300; y=(i//3)*300
     d.rounded_rectangle((x+8,y+8,x+292,y+292),radius=18,fill="#E8E2D6")

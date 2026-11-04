@@ -130,7 +130,9 @@ def main():
         video=work/f"v{index}.mp4"
         run(["ffmpeg","-y","-loop","1","-i",str(image),"-i",str(audio),"-t",f"{duration:.3f}","-r",str(FPS),"-vf",f"scale={W}:{H},format=yuv420p","-af","apad","-c:v","libx264","-preset","ultrafast","-c:a","aac","-b:a","128k",str(video)])
         clips.append(video)
-        kind="word" if word else ("caption" if message and message.strip() else "scene")\n        box=[58,1120,1022,1800] if kind=="word" else ([58,1480,1022,1830] if kind=="caption" else None)\n        layout.append({"start":round(elapsed,3),"end":round(elapsed+duration,3),"type":kind,"has_text":bool(word or (message and message.strip())),"box":box,"character_box":[x,y,x+ch.width,y+ch.height],"duration":round(duration,3),"spoken":round(spoken,3)})
+        kind="word" if word else ("caption" if message and message.strip() else "scene")
+        box=[58,1120,1022,1800] if kind=="word" else ([58,1480,1022,1830] if kind=="caption" else None)
+        layout.append({"start":round(elapsed,3),"end":round(elapsed+duration,3),"type":kind,"has_text":bool(word or (message and message.strip())),"box":box,"duration":round(duration,3),"spoken":round(spoken,3)})
         elapsed+=duration
     # Intro: fixed 5 s greeting, followed by a short narrated market establishing shot.
     add(data["titulo_pt"],"pt","saludando",message=data["titulo_pt"],min_duration=5.0)

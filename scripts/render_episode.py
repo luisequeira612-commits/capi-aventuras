@@ -113,7 +113,7 @@ def main():
         index=len(clips); audio=work/f"a{index}.wav"
         if text:
             raw=work/f"voice{index}.mp3"; make_voice(text,lang,raw)
-            subprocess.run(["ffmpeg","-y","-i",str(raw),"-ac","1","-ar","24000",str(audio)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
+            subprocess.run(["ffmpeg","-y","-i",str(raw),"-af","silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12:stop_periods=1:stop_duration=0.15:stop_threshold=-45dB:stop_silence=0.12","-ac","1","-ar","24000",str(audio)],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE)
             duration=audio_duration(audio)
             subtitles.append((elapsed,elapsed+duration,text))
         else:

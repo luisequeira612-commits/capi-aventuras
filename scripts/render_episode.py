@@ -140,7 +140,7 @@ def main():
     for scene in data["escenas"]:
         item=scene["palabras_es"][0]
         add(scene["texto_pt"],"pt",scene["pose"],message=scene["texto_pt"],min_duration=4.8)
-        add(item["es"],"es",scene["pose"],item["es"],item["pt"],min_duration=2.5)
+        add(item["es"],"es",scene["pose"],item["es"],item["pt"])
         add("",pose=scene["pose"],word=item["es"],translation=item["pt"],silence=2.5)
     add("Vamos revisar! Repita as palavras comigo.","pt","feliz",message="Vamos revisar! Repita as palavras comigo.",min_duration=4.5)
     for scene in data["escenas"]:

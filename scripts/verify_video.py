@@ -67,6 +67,7 @@ def main():
         f"OCR textos tocando el borde: {ocr_edge_hits}",
         f"Silencios >=0.8 s detectados: {len(silences)}",
         f"Silencio más largo detectado: {max_silence:.3f} s",
+        "Intervalos de silencio: " + "; ".join(f"{start:.3f}-{start+length:.3f}s ({length:.3f}s)" for start,length in silences),
         "Texto: medición Pillow y ajuste automático antes de dibujar; OCR de bordes como comprobación secundaria.",
         "Cajas vacías: no se dibujan cajas inferiores sin texto."
     ])+"\n",encoding="utf-8")

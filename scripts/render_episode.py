@@ -74,7 +74,6 @@ def draw_narration(draw,message):
     return box
 
 def draw_word_card(draw,word,translation):
-    # One unified card centered in the lower half: Spanish, Portuguese, repetition cue.
     box=(58,1120,1022,1800); draw_box(draw,box)
     x1,y1,x2,y2=box
     f,lines,line_h,total=fit_lines(draw,word,x2-x1-100,210,116,76,8)
@@ -98,15 +97,12 @@ def make_frame(data,pose,word=None,translation=None,message=None):
     alpha=ch.getchannel("A").getbbox()
     if alpha: ch=ch.crop(alpha)
     ch.thumbnail((500,760),Image.Resampling.LANCZOS)
-    # Market composition reserves the left stalls and their fruit; Capi stands at right.
     x=555 if data["fondo"]=="mercado" else (W-ch.width)//2
     y=380 if not word else 340
     bg.paste(ch,(x,y),ch)
     draw=ImageDraw.Draw(bg)
-    if message:
-        draw_narration(draw,message)
-    elif word:
-        draw_word_card(draw,word,translation or "")
+    if message: draw_narration(draw,message)
+    elif word: draw_word_card(draw,word,translation or "")
     return bg
 
 def main():
@@ -119,8 +115,11 @@ def main():
         index=len(clips); audio=work/f"a{index}.wav"
         if text:
             raw=work/f"voice{index}.mp3"; make_voice(text,lang,raw)
-            run(["ffmpeg","-y","-i",str(raw),"-af","silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12:stop_periods=1:stop_duration=0.15:stop_threshold=-45dB:stop_silence=0.12","-ac","1","-ar","24000",str(audio)])
-            spoken=audio_duration(audio); duration=max(spoken,float(min_duration))
+            run(["ffmpeg","-y","-i",str(raw),"-af","silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12,areverse,silenceremove=start_periods=1:start_duration=0.15:start_threshold=-45dB:start_silence=0.12,areverse","-ac","1","-ar","24000",str(audio)])
+            spoken=audio_duration(audio)
+            if min_duration and spoken+0.35<float(min_duration):
+                raise RuntimeError(f"Locución demasiado corta: {spoken:.2f}s; se necesitan al menos {float(min_duration):.2f}s. Amplía el texto, no añadas silencio.")
+            duration=spoken
             subtitles.append((elapsed,elapsed+spoken,text))
         else:
             spoken=0.0; duration=float(silence)
@@ -134,21 +133,21 @@ def main():
         box=[58,1120,1022,1800] if kind=="word" else ([58,1480,1022,1830] if kind=="caption" else None)
         layout.append({"start":round(elapsed,3),"end":round(elapsed+duration,3),"type":kind,"has_text":bool(word or (message and message.strip())),"box":box,"duration":round(duration,3),"spoken":round(spoken,3)})
         elapsed+=duration
-    # Intro: fixed 5 s greeting, followed by a short narrated market establishing shot.
+    # The spoken content itself fills each scene; min_duration is a guard, never silent padding.
     add(data["titulo_pt"],"pt","saludando",message=data["titulo_pt"],min_duration=5.0)
-    add(data["lugar"],"pt","neutral",message=data["lugar"],min_duration=6.0)
+    add(data["lugar"],"pt","neutral",message=data["lugar"],min_duration=5.5)
     for scene in data["escenas"]:
         item=scene["palabras_es"][0]
-        add(scene["texto_pt"],"pt",scene["pose"],message=scene["texto_pt"],min_duration=4.8)
+        add(scene["texto_pt"],"pt",scene["pose"],message=scene["texto_pt"],min_duration=4.6)
         add(item["es"],"es",scene["pose"],item["es"],item["pt"])
         add("",pose=scene["pose"],word=item["es"],translation=item["pt"],silence=2.5)
     add("Vamos revisar! Repita as palavras comigo.","pt","feliz",message="Vamos revisar! Repita as palavras comigo.",min_duration=4.5)
     for scene in data["escenas"]:
         item=scene["palabras_es"][0]
-        add(item["es"],"es","feliz",item["es"],item["pt"],min_duration=1.5)
+        add(item["es"],"es","feliz",item["es"],item["pt"])
         add("",pose="feliz",word=item["es"],translation=item["pt"],silence=0.8)
     closing=data.get("cierre_pt","Muito bem! Até a próxima aventura!")
-    add(closing,"pt","saludando",message=closing,min_duration=7.0)
+    add(closing,"pt","saludando",message=closing,min_duration=6.5)
     listing=work/"concat.txt"; listing.write_text("\n".join(f"file '{p.as_posix()}'" for p in clips),encoding="utf-8")
     eid=Path(a.episode).stem; mp4=out/f"{eid}.mp4"
     run(["ffmpeg","-y","-f","concat","-safe","0","-i",str(listing),"-c","copy","-movflags","+faststart",str(mp4)])

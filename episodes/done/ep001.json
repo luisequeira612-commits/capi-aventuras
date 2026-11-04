@@ -1,55 +1,30 @@
 {
-  "titulo_pt": "Hola, Capi! Vamos ao mercado aprender palavras novas.",
-  "lugar": "Hoje estamos no mercado! Há frutas fresquinhas por aqui.",
+  "titulo_pt": "Olá, Capi! Hoje vamos passear pelo mercado e descobrir quatro palavras novas em espanhol. Você vem comigo nessa aventura?",
+  "lugar": "Olhe quantas barracas coloridas! Há frutas, pães e leite fresquinhos. Vamos descobrir como chamamos esses alimentos em espanhol?",
   "fondo": "mercado",
   "escenas": [
     {
       "pose": "hablando_abierta",
-      "texto_pt": "Em espanhol, manzana!",
-      "palabras_es": [
-        {
-          "es": "manzana",
-          "pt": "maçã"
-        }
-      ]
+      "texto_pt": "Veja esta maçã vermelha e brilhante! É uma fruta doce, deliciosa e muito comum nas feiras.",
+      "palabras_es": [{"es": "manzana", "pt": "maçã"}]
     },
     {
       "pose": "feliz",
-      "texto_pt": "Em espanhol, pan!",
-      "palabras_es": [
-        {
-          "es": "pan",
-          "pt": "pão"
-        }
-      ]
+      "texto_pt": "Este pão acabou de sair do forno! Está quentinho, cheiroso e combina com um delicioso café da manhã.",
+      "palabras_es": [{"es": "pan", "pt": "pão"}]
     },
     {
       "pose": "hablando_cerrada",
-      "texto_pt": "Em espanhol, leche!",
-      "palabras_es": [
-        {
-          "es": "leche",
-          "pt": "leite"
-        }
-      ]
+      "texto_pt": "Um copo de leite pode acompanhar o café da manhã. Ele é branquinho e também usamos em receitas.",
+      "palabras_es": [{"es": "leche", "pt": "leite"}]
     },
     {
       "pose": "sorprendido",
-      "texto_pt": "Em espanhol, plátano!",
-      "palabras_es": [
-        {
-          "es": "plátano",
-          "pt": "banana"
-        }
-      ]
+      "texto_pt": "Que banana bonita! Podemos descascar esta fruta amarela e levar para comer durante o nosso passeio.",
+      "palabras_es": [{"es": "plátano", "pt": "banana"}]
     }
   ],
-  "cierre_pt": "Muito bem! Você aprendeu quatro palavras em espanhol. Até a próxima aventura!",
+  "cierre_pt": "Muito bem! Hoje você aprendeu quatro palavras em espanhol no mercado. Continue praticando, sorria e venha comigo na próxima aventura!",
   "descripcion_pt": "Aprenda quatro palavras em espanhol com Capi, uma capivara viajante. Episódio 001, para crianças de 3 a 6 anos.",
-  "hashtags": [
-    "#CapiAventuras",
-    "#AprenderEspanhol",
-    "#EspanholParaCriancas",
-    "#Capivara"
-  ]
+  "hashtags": ["#CapiAventuras", "#AprenderEspanhol", "#EspanholParaCriancas", "#Capivara"]
 }
